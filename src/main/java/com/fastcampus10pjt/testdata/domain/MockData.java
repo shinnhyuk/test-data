@@ -8,13 +8,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SchemaField {
+public class MockData {
 
-    private String fieldName;
     private MockDataType mockDataType;
-    private Integer fieldOrder;
-    private Integer blackPercent;
-    private String typeOptionJson;
-    private String forceValue;
+    private String mockDataValue;
 
 }
