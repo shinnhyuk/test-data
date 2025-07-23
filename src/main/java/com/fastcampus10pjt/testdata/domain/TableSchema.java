@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -26,8 +27,9 @@ public class TableSchema extends AuditingFields{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter private String schemaName;
-    @Setter private String userId;
+    @Setter @Column(nullable = false) private String schemaName;
+    @Setter @Column(nullable = false) private String userId;
+
     @Setter private LocalDateTime exportedAt;
 
     @ToString.Exclude
