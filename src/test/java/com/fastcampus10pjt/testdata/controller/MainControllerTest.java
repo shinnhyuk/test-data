@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(MainController.class)
 record MainControllerTest (@Autowired MockMvc mvc){
 
-    @DisplayName("[GET] 메인(루트) 페이지 -> 메인 뷰 (정상)")
+    @DisplayName("[GET] 메인(루트) 페이지 -> 테이블 스키마 페이지로 포워딩 (정상)")
     @Test
     void givenNothing_whenEnteringRootPage_thenShowsMainView() throws Exception{
         // Given
