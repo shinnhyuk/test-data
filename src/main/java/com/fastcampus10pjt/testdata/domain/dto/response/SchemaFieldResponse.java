@@ -4,8 +4,8 @@ import com.fastcampus10pjt.testdata.domain.constant.MockDataType;
 import com.fastcampus10pjt.testdata.domain.dto.SchemaFieldDto;
 
 public record SchemaFieldResponse(
-        MockDataType mockDataType,
         String fieldName,
+        MockDataType mockDataType,
         Integer fieldOrder,
         Integer blankPercent,
         String typeOptionJson,
@@ -13,12 +13,13 @@ public record SchemaFieldResponse(
 ) {
     public static SchemaFieldResponse fromDto(SchemaFieldDto dto) {
         return new SchemaFieldResponse(
-                dto.mockDataType(),
                 dto.fieldName(),
+                dto.mockDataType(),
                 dto.fieldOrder(),
                 dto.blankPercent(),
                 dto.typeOptionJson(),
                 dto.forceValue()
         );
     }
+
 }

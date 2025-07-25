@@ -18,6 +18,7 @@ public record TableSchemaDto(
         LocalDateTime modifiedAt,
         String modifiedBy
 ) {
+
     public static TableSchemaDto of(Long id, String schemaName, String userId, LocalDateTime exportedAt, Set<SchemaFieldDto> schemaFields, LocalDateTime createdAt, String createdBy, LocalDateTime modifiedAt, String modifiedBy) {
         return new TableSchemaDto(id, schemaName, userId, exportedAt, schemaFields, createdAt, createdBy, modifiedAt, modifiedBy);
     }
@@ -43,9 +44,10 @@ public record TableSchemaDto(
     }
 
     public TableSchema createEntity() {
-        TableSchema entity = TableSchema.of(this.schemaName, this.userId);
+        TableSchema entity = TableSchema.of(schemaName, userId);
         entity.addSchemaFields(schemaFields.stream().map(SchemaFieldDto::createEntity).toList());
 
         return entity;
     }
+
 }

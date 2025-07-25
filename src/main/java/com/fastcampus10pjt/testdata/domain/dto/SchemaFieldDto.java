@@ -3,7 +3,6 @@ package com.fastcampus10pjt.testdata.domain.dto;
 import com.fastcampus10pjt.testdata.domain.SchemaField;
 import com.fastcampus10pjt.testdata.domain.constant.MockDataType;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public record SchemaFieldDto(
@@ -48,12 +47,13 @@ public record SchemaFieldDto(
 
     public SchemaField createEntity() {
         return SchemaField.of(
-                this.fieldName(),
-                this.mockDataType(),
-                this.fieldOrder(),
-                this.blankPercent(),
-                this.typeOptionJson(),
-                this.forceValue()
+                fieldName,
+                mockDataType,
+                fieldOrder,
+                blankPercent,
+                typeOptionJson,
+                forceValue
         );
     }
+
 }

@@ -44,27 +44,31 @@ record FormDataEncoderTest(@Autowired FormDataEncoder formDataEncoder) {
         assertThat(result).isEqualTo(
                 (
                         "str=This 'is' \"test\" string" +
-                                "&listStr1=[hello,my,friend]" +
-                                "&listStr2=hello,my,friend" +
-                                "&number=1234" +
-                                "&floatingNumber=3.14" +
-                                "&bool=false" +
-                                "&bigDecimal=10" +
-                                "&testEnum=THREE" +
-                                "&list[0]=one" +
-                                "&list[1]=two" +
-                                "&list[2]=three" +
-                                "&obj.str=hello" +
-                                "&obj.number=10" +
-                                "&obj.bool=true" +
-                                "&objectList[0].str=ONE" +
-                                "&objectList[0].number=1" +
-                                "&objectList[0].bool=true" +
-                                "&objectList[1].str=TWO" +
-                                "&objectList[1].number=2" +
-                                "&objectList[1].bool=false"
-                ).replace("[", "%5B").replace("]","%5D").replace(" ","%20").replace("\"","%22")
+                        "&listStr1=[hello,my,friend]" +
+                        "&listStr2=hello,my,friend" +
+                        "&number=1234" +
+                        "&floatingNumber=3.14" +
+                        "&bool=false" +
+                        "&bigDecimal=10" +
+                        "&testEnum=THREE" +
+                        "&list[0]=one" +
+                        "&list[1]=two" +
+                        "&list[2]=three" +
+                        "&obj.str=hello" +
+                        "&obj.number=10" +
+                        "&obj.bool=true" +
+                        "&objectList[0].str=ONE" +
+                        "&objectList[0].number=1" +
+                        "&objectList[0].bool=true" +
+                        "&objectList[1].str=TWO" +
+                        "&objectList[1].number=2" +
+                        "&objectList[1].bool=false"
+                ).replace("[", "%5B").replace("]", "%5D").replace(" ", "%20").replace("\"", "%22")
         );
+    }
+
+    enum TestEnum {
+        ONE, TWO, THREE
     }
 
     record TestObject(
@@ -80,15 +84,14 @@ record FormDataEncoderTest(@Autowired FormDataEncoder formDataEncoder) {
             List<String> list,
             TestObject2 obj,
             List<TestObject2> objectList
-    ){}
-
-    enum TestEnum{
-            ONE, TWO, THREE
+    ) {
     }
 
     record TestObject2(
             String str,
             Integer number,
             Boolean bool
-    ){}
+    ) {
+    }
+
 }

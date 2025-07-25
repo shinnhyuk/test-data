@@ -74,4 +74,5 @@ public class SchemaField extends AuditingFields{
         }
         return Objects.hash(getId());
     }
+
 }
