@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Disabled("우선 구현 전 테스트를 먼저 작성함. 테스트로 스펙을 전달하고, 아직 구현이 없으므로 비활성화.")
+//@Disabled("우선 구현 전 테스트를 먼저 작성함. 테스트로 스펙을 전달하고, 아직 구현이 없으므로 비활성화.")
 @DisplayName("[Controller] 테이블 스키마 컨트롤러 테스트")
 @Import({SecurityConfig.class, FormDataEncoder.class})
 @WebMvcTest
@@ -66,6 +66,7 @@ record TableSchemaControllerTest(
                                 .with(csrf())
                 )
                 .andExpect(status().is3xxRedirection())
+                .andExpect(flash().attribute("tableSchemaRequest", request))
                 .andExpect(redirectedUrl("/table-schema"));
     }
 

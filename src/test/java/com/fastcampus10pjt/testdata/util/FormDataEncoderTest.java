@@ -63,7 +63,7 @@ record FormDataEncoderTest(@Autowired FormDataEncoder formDataEncoder) {
                                 "&objectList[1].str=TWO" +
                                 "&objectList[1].number=2" +
                                 "&objectList[1].bool=false"
-                ).replace("[", "%5B").replace(" ","%20").replace("\"","%22")
+                ).replace("[", "%5B").replace("]","%5D").replace(" ","%20").replace("\"","%22")
         );
     }
 
