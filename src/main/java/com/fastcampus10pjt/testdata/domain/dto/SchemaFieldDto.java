@@ -3,7 +3,6 @@ package com.fastcampus10pjt.testdata.domain.dto;
 import com.fastcampus10pjt.testdata.domain.SchemaField;
 import com.fastcampus10pjt.testdata.domain.constant.MockDataType;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public record SchemaFieldDto(
@@ -56,4 +55,5 @@ public record SchemaFieldDto(
                 this.forceValue()
         );
     }
+
 }

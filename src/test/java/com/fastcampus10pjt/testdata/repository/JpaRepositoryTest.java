@@ -175,4 +175,5 @@ class JpaRepositoryTest {
             return () -> Optional.of(TEST_AUDITOR);
         }
     }
+
 }

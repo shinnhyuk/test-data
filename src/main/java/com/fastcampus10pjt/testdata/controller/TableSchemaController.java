@@ -1,14 +1,12 @@
 package com.fastcampus10pjt.testdata.controller;
 
 import com.fastcampus10pjt.testdata.domain.dto.request.TableSchemaRequest;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -45,6 +43,7 @@ public class TableSchemaController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=table_schema.txt")
-                .body("download complete!");
+                .body("download complete!"); // TODO: 나중에 데이터 바꿔야 함
     }
+
 }

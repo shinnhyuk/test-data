@@ -1,7 +1,6 @@
 package com.fastcampus10pjt.testdata.controller;
 
 import com.fastcampus10pjt.testdata.config.SecurityConfig;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,4 +31,5 @@ record UserAccountControllerTest(@Autowired MockMvc mvc) {
                 .andExpect(view().name("my-account"));
 
     }
+
 }

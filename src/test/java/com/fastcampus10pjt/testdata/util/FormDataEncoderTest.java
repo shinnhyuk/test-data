@@ -91,4 +91,5 @@ record FormDataEncoderTest(@Autowired FormDataEncoder formDataEncoder) {
             Integer number,
             Boolean bool
     ){}
+
 }

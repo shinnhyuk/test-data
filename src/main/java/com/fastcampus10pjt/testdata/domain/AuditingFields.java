@@ -45,4 +45,5 @@ public abstract class AuditingFields {
     @LastModifiedBy
     @Column(nullable = false)
     protected String modifiedBy; // 수정자
+
 }

@@ -72,4 +72,5 @@ class TableSchemaRepositoryTest {
         assertThat(sut.findByUserIdAndSchemaName(userId, schemaName)).isEmpty();
 
     }
+
 }

@@ -24,4 +24,5 @@ public record TableSchemaRequest(
                         .collect(Collectors.toUnmodifiableSet())
         );
     }
+
 }

@@ -5,7 +5,6 @@ import com.fastcampus10pjt.testdata.domain.constant.MockDataType;
 import com.fastcampus10pjt.testdata.domain.dto.request.SchemaFieldRequest;
 import com.fastcampus10pjt.testdata.domain.dto.request.TableSchemaRequest;
 import com.fastcampus10pjt.testdata.util.FormDataEncoder;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,4 +108,5 @@ record TableSchemaControllerTest(
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=table_schema.txt"))
                 .andExpect(content().string("download complete!")); // TODO: 나중에 데이터 바꿔야 함
     }
+    
 }

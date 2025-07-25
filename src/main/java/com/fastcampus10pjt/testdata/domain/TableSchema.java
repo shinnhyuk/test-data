@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -99,4 +98,5 @@ public class TableSchema extends AuditingFields{
         }
         return Objects.hash(getId());
     }
+
 }

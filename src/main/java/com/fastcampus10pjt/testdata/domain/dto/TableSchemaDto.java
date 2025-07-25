@@ -18,6 +18,7 @@ public record TableSchemaDto(
         LocalDateTime modifiedAt,
         String modifiedBy
 ) {
+
     public static TableSchemaDto of(Long id, String schemaName, String userId, LocalDateTime exportedAt, Set<SchemaFieldDto> schemaFields, LocalDateTime createdAt, String createdBy, LocalDateTime modifiedAt, String modifiedBy) {
         return new TableSchemaDto(id, schemaName, userId, exportedAt, schemaFields, createdAt, createdBy, modifiedAt, modifiedBy);
     }
@@ -48,4 +49,5 @@ public record TableSchemaDto(
 
         return entity;
     }
+
 }

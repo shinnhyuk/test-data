@@ -9,6 +9,7 @@ public record TableSchemaResponse(
         String userId,
         List<SchemaFieldResponse> schemaFields
 ) {
+
     public static TableSchemaResponse fromDto(TableSchemaDto dto){
         return new TableSchemaResponse(
                 dto.schemaName(),
@@ -16,4 +17,5 @@ public record TableSchemaResponse(
                 dto.schemaFields().stream().map(SchemaFieldResponse::fromDto).toList()
         );
     }
+
 }

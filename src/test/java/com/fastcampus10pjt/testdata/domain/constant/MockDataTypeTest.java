@@ -34,4 +34,5 @@ class MockDataTypeTest {
         assertThat(result.toString())
                 .contains("name", "requiredOptions", "baseType");
     }
+
 }
