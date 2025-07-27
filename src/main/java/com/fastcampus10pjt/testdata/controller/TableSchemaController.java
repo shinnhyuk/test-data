@@ -67,7 +67,7 @@ public class TableSchemaController {
     public String deleteMySchma(
             @PathVariable String schemaName,
             RedirectAttributes redirectAttrs){
-        return "redirect:/my-schemas";
+        return "redirect:/table-schema/my-schemas";
     }
 
     @GetMapping("/table-schema/export")
