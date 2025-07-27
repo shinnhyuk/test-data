@@ -1,10 +1,13 @@
 package com.fastcampus10pjt.testdata.controller;
 
 import com.fastcampus10pjt.testdata.config.SecurityConfig;
+import com.fastcampus10pjt.testdata.domain.constant.ExportFileType;
 import com.fastcampus10pjt.testdata.domain.constant.MockDataType;
 import com.fastcampus10pjt.testdata.domain.dto.request.SchemaFieldRequest;
+import com.fastcampus10pjt.testdata.domain.dto.request.TableSchemaExportRequest;
 import com.fastcampus10pjt.testdata.domain.dto.request.TableSchemaRequest;
 import com.fastcampus10pjt.testdata.util.FormDataEncoder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(TableSchemaController.class)
 record TableSchemaControllerTest(
         @Autowired MockMvc mvc,
-        @Autowired FormDataEncoder formDataEncoder
+        @Autowired FormDataEncoder formDataEncoder,
+        @Autowired ObjectMapper mapper
 ) {
 
     @DisplayName("[GET] 테이블 스키마 조회, 비로그인 최초 진입 (정상)")
@@ -39,6 +43,9 @@ record TableSchemaControllerTest(
         mvc.perform(get("/table-schema"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(model().attributeExists("tableSchema"))
+                .andExpect(model().attributeExists("mockDataTypes"))
+                .andExpect(model().attributeExists("fileTypes"))
                 .andExpect(view().name("table-schema"));
 
     }
@@ -100,13 +107,25 @@ record TableSchemaControllerTest(
     @Test
     void givenTableSchema_whenDownloading_thenReturnsFile() throws Exception {
         // Given
+        TableSchemaExportRequest request = TableSchemaExportRequest.of(
+                "test",
+                77,
+                ExportFileType.JSON,
+                List.of(
+                        SchemaFieldRequest.of("id", MockDataType.ROW_NUMBER, 1, 0, null, null),
+                        SchemaFieldRequest.of("name", MockDataType.NAME, 1, 0, "option", "well"),
+                        SchemaFieldRequest.of("age", MockDataType.NUMBER, 3, 20, null, null)
+                )
+        );
+
+        String queryParam = formDataEncoder.encode(request, false);
 
         // When & Then
-        mvc.perform(get("/table-schema/export"))
+        mvc.perform(get("/table-schema/export?" + queryParam))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=table_schema.txt"))
-                .andExpect(content().string("download complete!")); // TODO: 나중에 데이터 바꿔야 함
+                .andExpect(content().json(mapper.writeValueAsString(request))); // TODO: 나중에 데이터 바꿔야 함
     }
     
 }
