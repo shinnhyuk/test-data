@@ -2,7 +2,6 @@ package com.fastcampus10pjt.testdata.domain.dto.request;
 
 import com.fastcampus10pjt.testdata.domain.constant.ExportFileType;
 import com.fastcampus10pjt.testdata.domain.dto.TableSchemaDto;
-import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
