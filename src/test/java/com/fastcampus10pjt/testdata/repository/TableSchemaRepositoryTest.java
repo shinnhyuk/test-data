@@ -26,7 +26,7 @@ class TableSchemaRepositoryTest {
     @Test
     void givenUserIdAndPagingInfo_whenSelecting_thenReturnPagedTableSchema(){
         // Given
-        var userId = "djkeh";
+        var userId = "shinnhyuk";
         var pageable = Pageable.ofSize(5);
 
         // When
@@ -46,7 +46,7 @@ class TableSchemaRepositoryTest {
     @Test
     void givenUserIdAndSchemaName_whenSelecting_thenReturnsTableSchema(){
         // Given
-        var userId = "djkeh";
+        var userId = "shinnhyuk";
         var schemaName = "test_schema1";
 
         // When
@@ -63,7 +63,7 @@ class TableSchemaRepositoryTest {
     @Test
     void givenUserIdAndSchemaName_whenDeletingTableSchema_thenDeletes(){
         // Given
-        var userId = "djkeh";
+        var userId = "shinnhyuk";
         var schemaName = "test_schema1";
 
         // When
