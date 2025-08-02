@@ -7,17 +7,14 @@ import com.fastcampus10pjt.testdata.domain.dto.TableSchemaDto;
 import com.fastcampus10pjt.testdata.domain.dto.request.SchemaFieldRequest;
 import com.fastcampus10pjt.testdata.domain.dto.request.TableSchemaExportRequest;
 import com.fastcampus10pjt.testdata.domain.dto.request.TableSchemaRequest;
-import com.fastcampus10pjt.testdata.domain.dto.response.SimpleTableSchemaResponse;
 import com.fastcampus10pjt.testdata.domain.dto.security.GithubUser;
 import com.fastcampus10pjt.testdata.service.TableSchemaService;
 import com.fastcampus10pjt.testdata.util.FormDataEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -101,13 +98,13 @@ class TableSchemaControllerTest {
         var githubUser = new GithubUser("test-id", "test-name", "test@email.com");
         TableSchemaRequest request = TableSchemaRequest.of(
                 "test_schema",
-                "홍길동",
                 List.of(
                         SchemaFieldRequest.of("id", MockDataType.ROW_NUMBER, 1, 0, null, null),
                         SchemaFieldRequest.of("name", MockDataType.NAME, 2, 10, null, null),
                         SchemaFieldRequest.of("age", MockDataType.NUMBER, 3, 20, null, null)
                 )
         );
+        willDoNothing().given(tableSchemaService).saveMySchema(request.toDto(githubUser.id()));
 
         // When & Then
         mvc.perform(
@@ -120,6 +117,7 @@ class TableSchemaControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attribute("tableSchemaRequest", request))
                 .andExpect(redirectedUrl("/table-schema"));
+        then(tableSchemaService).should().saveMySchema(request.toDto(githubUser.id()));
     }
 
     @DisplayName("[GET] 내 스키마 목록 조회 (비로그인)")
