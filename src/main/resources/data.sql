@@ -1,7 +1,7 @@
 -- 예제 테이블 스키마
 insert into table_schema (id, schema_name, user_id, exported_at, created_at, created_by, modified_at, modified_by)
 values
-    (1, 'test_schema1', 'djkeh', null, now(), 'uno', now(), 'uno')
+    (1, 'test_schema1', 'shinnhyuk', null, now(), 'kshinn', now(), 'kshinn')
 ;
 
 -- 테이블 스키마 id를 직접 입력하였으므로 auto increment 수치를 직접 제어해줘야 함
@@ -12,10 +12,10 @@ insert into schema_field (table_schema_id, field_order, field_name, mock_data_ty
                           type_option_json, blank_percent, force_value,
                           created_at, created_by, modified_at, modified_by)
 values
-    (1, 1, 'id', 'ROW_NUMBER', '{"start": 1, "step": 1}', 0, null, now(), 'uno', now(), 'uno'),
-    (1, 3, 'age', 'NUMBER', '{"min": 10, "max": 30, "decimals": 0}', 50, null, now(), 'uno', now(), 'uno'),
-    (1, 2, 'name', 'STRING', '{"minLength": 1, "maxLength": 10}', 0, null, now(), 'uno', now(), 'uno'),
-    (1, 4, 'active', 'BOOLEAN', null, 0, 'true', now(), 'uno', now(), 'uno')
+    (1, 1, 'id', 'ROW_NUMBER', '{"start": 1, "step": 1}', 0, null, now(), 'kshinn', now(), 'kshinn'),
+    (1, 3, 'age', 'NUMBER', '{"min": 10, "max": 30, "decimals": 0}', 50, null, now(), 'kshinn', now(), 'kshinn'),
+    (1, 2, 'name', 'STRING', '{"minLength": 1, "maxLength": 10}', 0, null, now(), 'kshinn', now(), 'kshinn'),
+    (1, 4, 'active', 'BOOLEAN', null, 0, 'true', now(), 'kshinn', now(), 'kshinn')
 ;
 
 -- 샘플 가짜 데이터

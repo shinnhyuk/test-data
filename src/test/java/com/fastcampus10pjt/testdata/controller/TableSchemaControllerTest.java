@@ -3,24 +3,32 @@ package com.fastcampus10pjt.testdata.controller;
 import com.fastcampus10pjt.testdata.config.SecurityConfig;
 import com.fastcampus10pjt.testdata.domain.constant.ExportFileType;
 import com.fastcampus10pjt.testdata.domain.constant.MockDataType;
+import com.fastcampus10pjt.testdata.domain.dto.TableSchemaDto;
 import com.fastcampus10pjt.testdata.domain.dto.request.SchemaFieldRequest;
 import com.fastcampus10pjt.testdata.domain.dto.request.TableSchemaExportRequest;
 import com.fastcampus10pjt.testdata.domain.dto.request.TableSchemaRequest;
+import com.fastcampus10pjt.testdata.domain.dto.response.SimpleTableSchemaResponse;
 import com.fastcampus10pjt.testdata.domain.dto.security.GithubUser;
+import com.fastcampus10pjt.testdata.service.TableSchemaService;
 import com.fastcampus10pjt.testdata.util.FormDataEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,11 +39,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("[Controller] 테이블 스키마 컨트롤러 테스트")
 @Import({SecurityConfig.class, FormDataEncoder.class})
 @WebMvcTest(TableSchemaController.class)
-record TableSchemaControllerTest(
-        @Autowired MockMvc mvc,
-        @Autowired FormDataEncoder formDataEncoder,
-        @Autowired ObjectMapper mapper
-) {
+class TableSchemaControllerTest {
+
+    @Autowired private MockMvc mvc;
+    @Autowired private FormDataEncoder formDataEncoder;
+    @Autowired private ObjectMapper mapper;
+
+    @MockitoBean private TableSchemaService tableSchemaService;
 
     @DisplayName("[GET] 테이블 스키마 조회, 비로그인 최초 진입 (정상)")
     @Test
@@ -50,7 +60,7 @@ record TableSchemaControllerTest(
                 .andExpect(model().attributeExists("mockDataTypes"))
                 .andExpect(model().attributeExists("fileTypes"))
                 .andExpect(view().name("table-schema"));
-
+        then(tableSchemaService).shouldHaveNoInteractions(); // 서비스 호출 없음
     }
 
     @DisplayName("[GET] 테이블 스키마 조회, 로그인 + 특정 테이블 스키마 (정상)")
@@ -59,6 +69,13 @@ record TableSchemaControllerTest(
         // Given
         var githubUser = new GithubUser("test-id", "test-name", "test@email.com");
         var schemaName = "test_schema";
+        given(tableSchemaService.loadMySchema(githubUser.id(), schemaName))
+                .willReturn(TableSchemaDto.of(
+                        schemaName,
+                        githubUser.id(),
+                        null,
+                        Set.of()
+                ));
 
         // When & Then
         mvc.perform(
@@ -74,7 +91,7 @@ record TableSchemaControllerTest(
                 .andExpect(model().attributeExists("fileTypes"))
                 .andExpect(content().string(containsString(schemaName))) // html 전체 검사로
                 .andExpect(view().name("table-schema"));
-
+        then(tableSchemaService).should().loadMySchema(githubUser.id(), schemaName);
     }
 
     @DisplayName("[POST] 테이블 스키마 생성, 변경 (정상)")
@@ -114,6 +131,7 @@ record TableSchemaControllerTest(
         mvc.perform(get("/table-schema/my-schemas"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/oauth2/authorization/github")); // Ant style pattern
+        then(tableSchemaService).shouldHaveNoInteractions(); // 서비스 호출 없음
     }
 
     @DisplayName("[GET] 내 스키마 목록 조회 (정상)")
@@ -121,6 +139,8 @@ record TableSchemaControllerTest(
     void givenAuthenticatedUser_whenRequestingMySchemas_thenShowsMySchemasView() throws Exception {
         // Given
         var githubUser = new GithubUser("test-id", "test-name", "test@email.com");
+        given(tableSchemaService.loadMySchemas(githubUser.id()))
+                .willReturn(List.of());
 
         // When & Then
         mvc.perform(
@@ -129,8 +149,9 @@ record TableSchemaControllerTest(
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-                .andExpect(model().attributeExists("tableSchemas"))
+                .andExpect(model().attribute("tableSchemas", List.of()))
                 .andExpect(view().name("my-schemas"));
+        then(tableSchemaService).should().loadMySchemas(githubUser.id());
     }
 
     @DisplayName("[POST] 내 스키마 삭제 (정상)")

@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 @DataJpaTest
 class JpaRepositoryTest {
 
-    private static final String TEST_AUDITOR = "test_uno";
+    private static final String TEST_AUDITOR = "test_kshinn";
 
     @Autowired
     private MockDataRepository mockDataRepository;
@@ -66,7 +66,7 @@ class JpaRepositoryTest {
         assertThat(tableSchemas).hasSize(1)
                 .first()
                 .hasFieldOrPropertyWithValue("schemaName", "test_schema1")
-                .hasFieldOrPropertyWithValue("userId", "djkeh")
+                .hasFieldOrPropertyWithValue("userId", "shinnhyuk")
                 .extracting("schemaFields", InstanceOfAssertFactories.COLLECTION)
                 .hasSize(4);
     }
@@ -74,7 +74,7 @@ class JpaRepositoryTest {
     @Test
     void insertTest() {
         // Given
-        TableSchema tableSchema = TableSchema.of("test_schema", "uno");
+        TableSchema tableSchema = TableSchema.of("test_schema", "shinnhyuk");
         tableSchema.addSchemaFields(List.of(
                 SchemaField.of("id", MockDataType.ROW_NUMBER, 1, 0, null, null),
                 SchemaField.of("age", MockDataType.NUMBER, 2, 10, null, null),
@@ -89,7 +89,7 @@ class JpaRepositoryTest {
         TableSchema newTableSchema = tableSchemaRepository.findById(saved.getId()).orElseThrow();
         assertThat(newTableSchema)
                 .hasFieldOrPropertyWithValue("schemaName", "test_schema")
-                .hasFieldOrPropertyWithValue("userId", "uno")
+                .hasFieldOrPropertyWithValue("userId", "shinnhyuk")
                 .hasFieldOrPropertyWithValue("createdBy", TEST_AUDITOR)
                 .hasFieldOrPropertyWithValue("modifiedBy", TEST_AUDITOR)
                 .hasFieldOrProperty("createdAt")
@@ -117,7 +117,7 @@ class JpaRepositoryTest {
         // Then
         assertThat(updated)
                 .hasFieldOrPropertyWithValue("schemaName", "test_modified")
-                .hasFieldOrPropertyWithValue("createdBy", "uno")
+                .hasFieldOrPropertyWithValue("createdBy", "kshinn")
                 .hasFieldOrPropertyWithValue("modifiedBy", TEST_AUDITOR)
                 .extracting("schemaFields", InstanceOfAssertFactories.COLLECTION)
                 .hasSize(1);
