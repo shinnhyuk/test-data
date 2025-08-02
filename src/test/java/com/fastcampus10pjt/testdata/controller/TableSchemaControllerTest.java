@@ -60,7 +60,7 @@ class TableSchemaControllerTest {
                 .andExpect(model().attributeExists("mockDataTypes"))
                 .andExpect(model().attributeExists("fileTypes"))
                 .andExpect(view().name("table-schema"));
-
+        then(tableSchemaService).shouldHaveNoInteractions(); // 서비스 호출 없음
     }
 
     @DisplayName("[GET] 테이블 스키마 조회, 로그인 + 특정 테이블 스키마 (정상)")
@@ -69,6 +69,13 @@ class TableSchemaControllerTest {
         // Given
         var githubUser = new GithubUser("test-id", "test-name", "test@email.com");
         var schemaName = "test_schema";
+        given(tableSchemaService.loadMySchema(githubUser.id(), schemaName))
+                .willReturn(TableSchemaDto.of(
+                        schemaName,
+                        githubUser.id(),
+                        null,
+                        Set.of()
+                ));
 
         // When & Then
         mvc.perform(
@@ -84,7 +91,7 @@ class TableSchemaControllerTest {
                 .andExpect(model().attributeExists("fileTypes"))
                 .andExpect(content().string(containsString(schemaName))) // html 전체 검사로
                 .andExpect(view().name("table-schema"));
-
+        then(tableSchemaService).should().loadMySchema(githubUser.id(), schemaName);
     }
 
     @DisplayName("[POST] 테이블 스키마 생성, 변경 (정상)")

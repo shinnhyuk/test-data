@@ -54,4 +54,43 @@ class TableSchemaServiceTest {
         then(tableSchemaRepository).should().findByUserId(userId, Pageable.unpaged());
     }
 
+    @DisplayName("사용자 ID와 스키마 이름이 주어지면, 테이블 스키마를 반환한다.")
+    @Test
+    void givenUserIdAndSchemaName_whenLoadingMySchema_thenReturnsTableSchema() {
+        // Given
+        String userId = "userId";
+        String schemaName = "table1";
+        TableSchema tableSchema = TableSchema.of(schemaName, userId);
+        given(tableSchemaRepository.findByUserIdAndSchemaName(userId, schemaName))
+                .willReturn(Optional.of(tableSchema));
+
+        // When
+        TableSchemaDto result = sut.loadMySchema(userId, schemaName);
+
+        // Then
+        assertThat(result)
+                .hasFieldOrPropertyWithValue("schemaName", schemaName)
+                .hasFieldOrPropertyWithValue("userId", userId);
+        then(tableSchemaRepository).should().findByUserIdAndSchemaName(userId, schemaName);
+    }
+
+    @DisplayName("사용자 ID와 스키마 이름에 대응하는 테이블 스키마가 없을 경우, 예외를 던진다.")
+    @Test
+    void givenUserIdAndSchemaName_whenLoadingNoneExistingMySchema_thenThrowsException() {
+        // Given
+        String userId = "userId";
+        String schemaName = "table1";
+        given(tableSchemaRepository.findByUserIdAndSchemaName(userId, schemaName))
+                .willReturn(Optional.empty());
+
+        // When
+        Throwable t = catchThrowable( () -> sut.loadMySchema(userId, schemaName));
+
+        // Then
+        assertThat(t)
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("테이블 스키마가 없습니다 - userId: " + userId + ", schemaName: " + schemaName);
+        then(tableSchemaRepository).should().findByUserIdAndSchemaName(userId, schemaName);
+    }
+
 }

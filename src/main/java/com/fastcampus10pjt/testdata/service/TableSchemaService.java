@@ -29,4 +29,11 @@ public class TableSchemaService {
                 .map(TableSchemaDto::fromEntity);
     }
 
+    @Transactional(readOnly = true)
+    public TableSchemaDto loadMySchema(String userId, String schemaName) {
+        return tableSchemaRepository.findByUserIdAndSchemaName(userId, schemaName)
+                .map(TableSchemaDto::fromEntity)
+                .orElseThrow(() -> new EntityNotFoundException("테이블 스키마가 없습니다 - userId: " + userId + ", schemaName: " + schemaName));
+    }
+
 }
