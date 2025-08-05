@@ -90,9 +90,11 @@ public class TableSchemaController {
 
     @GetMapping("/table-schema/export")
     public ResponseEntity<String> exportTableSchema(TableSchemaExportRequest tableSchemaExportRequest) {
+        String filename = tableSchemaExportRequest.schemaName() + "." +
+                tableSchemaExportRequest.fileType().name().toLowerCase();
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=table_schema.txt")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                 .body(json(tableSchemaExportRequest)); // TODO: 나중에 데이터 바꿔야 함
     }
 
