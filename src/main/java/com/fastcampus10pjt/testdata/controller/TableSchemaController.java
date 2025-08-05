@@ -8,8 +8,8 @@ import com.fastcampus10pjt.testdata.domain.dto.response.SchemaFieldResponse;
 import com.fastcampus10pjt.testdata.domain.dto.response.SimpleTableSchemaResponse;
 import com.fastcampus10pjt.testdata.domain.dto.response.TableSchemaResponse;
 import com.fastcampus10pjt.testdata.domain.dto.security.GithubUser;
+import com.fastcampus10pjt.testdata.service.SchemaExportService;
 import com.fastcampus10pjt.testdata.service.TableSchemaService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +31,7 @@ import java.util.List;
 public class TableSchemaController {
 
     private final TableSchemaService tableSchemaService;
+    private final SchemaExportService schemaExportService;
     private final ObjectMapper mapper;
 
     @GetMapping("/table-schema")
@@ -89,13 +90,20 @@ public class TableSchemaController {
     }
 
     @GetMapping("/table-schema/export")
-    public ResponseEntity<String> exportTableSchema(TableSchemaExportRequest tableSchemaExportRequest) {
+    public ResponseEntity<String> exportTableSchema(
+            @AuthenticationPrincipal GithubUser githubUser,
+            TableSchemaExportRequest tableSchemaExportRequest) {
+        String body = schemaExportService.export(
+                tableSchemaExportRequest.fileType(),
+                tableSchemaExportRequest.toDto(githubUser != null ? githubUser.id() : null),
+                tableSchemaExportRequest.rowCount()
+        );
         String filename = tableSchemaExportRequest.schemaName() + "." +
                 tableSchemaExportRequest.fileType().name().toLowerCase();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-                .body(json(tableSchemaExportRequest)); // TODO: 나중에 데이터 바꿔야 함
+                .body(body);
     }
 
     private TableSchemaResponse defaultTableSchema(String schemaName) {
@@ -109,14 +117,6 @@ public class TableSchemaController {
                         new SchemaFieldResponse("my_car", MockDataType.CAR, 4, 50, null, null)
                 )
         );
-    }
-
-    private String json(Object object){
-        try {
-            return mapper.writeValueAsString(object);
-        } catch (JsonProcessingException jpe) {
-            throw new RuntimeException(jpe);
-        }
     }
 
 }
