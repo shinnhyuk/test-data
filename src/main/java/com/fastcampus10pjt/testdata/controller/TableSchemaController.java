@@ -79,9 +79,12 @@ public class TableSchemaController {
     }
 
     @PostMapping("/table-schema/my-schemas/{schemaName}")
-    public String deleteMySchma(
-            @PathVariable String schemaName,
-            RedirectAttributes redirectAttrs){
+    public String deleteMySchema(
+            @AuthenticationPrincipal GithubUser githubUser,
+            @PathVariable String schemaName
+    ){
+        tableSchemaService.deleteTableSchema(githubUser.id(), schemaName);
+
         return "redirect:/table-schema/my-schemas";
     }
 
